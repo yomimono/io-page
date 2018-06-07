@@ -13,7 +13,7 @@ let () =
   let combined = prepend ^ onto in
   if not(String.equal combined "") then Unix.putenv "PKG_CONFIG_PATH" combined;
 
-  C.main ~name:"mirage-xen-ocaml" (fun c ->
+  C.main ~name:"xenplat" (fun c ->
     let default : C.Pkg_config.package_conf =
       { libs   = []
       ; cflags = []
@@ -23,7 +23,7 @@ let () =
       match C.Pkg_config.get c with
       | None -> default
       | Some pc ->
-        Option.value (C.Pkg_config.query pc ~package:"mirage-xen-ocaml") ~default
+        Option.value (C.Pkg_config.query pc ~package:"xenplat") ~default
     in
 
     write_sexp "c_flags_xen.sexp" (sexp_of_list sexp_of_string conf.cflags))
