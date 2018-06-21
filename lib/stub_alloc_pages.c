@@ -16,6 +16,7 @@
  */
 
 #ifdef __MINIOS__
+#include <mini-os/types.h>
 #include <mini-os/os.h>
 #include <mini-os/console.h>
 #include <mini-os/xmalloc.h>
