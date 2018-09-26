@@ -20,6 +20,6 @@ depends: [
   "jbuilder"  {build & >="1.0+beta9"}
   "configurator" {build}
   "cstruct" {>= "2.0.0"}
-  "ocaml-freestanding" {>= "dev"}
+  "ocaml-freestanding"
 ]
 available: [ocaml-version >= "4.02.3"]
