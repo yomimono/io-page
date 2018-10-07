@@ -13,6 +13,7 @@
   (modules (Io_page_xen_dummy))
   (c_names (stub_alloc_pages_xen stub_get_addr_xen))
   (c_flags (:include c_flags_xen.sexp))
+  (no_dynlink)
   (wrapped false)
 ))
 
