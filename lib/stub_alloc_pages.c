@@ -16,10 +16,16 @@
  */
 
 #ifdef __MINIOS__
-#include <mini-os/os.h>
-#include <mini-os/console.h>
-#include <mini-os/xmalloc.h>
-#else
+#include <uk/alloc.h> //uk_malloc, struct definitions
+#include <uk/print.h> //printk
+#define printk uk_printk
+#if (defined __X86_64__) || (defined __X86_32__)
+#include <xen-x86/mm.h> //only need this for PAGE_SIZE
+#endif
+#if (defined __ARM_64__) || (defined __ARM_32__)
+#include <xen-arm/os.h> //PAGE_SIZE is here on ARM, weirdly
+#endif
+#else //__MINIOS__
 #define _GNU_SOURCE
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -49,13 +55,16 @@
 CAMLprim value
 mirage_alloc_pages(value did_gc, value n_pages)
 {
+#ifdef __MINIOS__
+  struct uk_alloc* allocator = uk_alloc_get_default(); 
+#endif
   CAMLparam2(did_gc, n_pages);
   size_t len = Int_val(n_pages) * PAGE_SIZE;
   /* If the allocation fails, return None. The ocaml layer will
      be able to trigger a full GC which just might run finalizers
      of unused bigarrays which will free some memory. */
 #ifdef __MINIOS__
-  void* block = _xmalloc(len, PAGE_SIZE);
+  void* block = uk_malloc(allocator, len);
   if (block == NULL) {
 #elif _WIN32
   /* NB we can't use _aligned_malloc because we can't get OCaml to
