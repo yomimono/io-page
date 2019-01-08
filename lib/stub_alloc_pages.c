@@ -64,7 +64,7 @@ mirage_alloc_pages(value did_gc, value n_pages)
      be able to trigger a full GC which just might run finalizers
      of unused bigarrays which will free some memory. */
 #ifdef __MINIOS__
-  void* block = uk_malloc(allocator, len);
+  void* block = uk_malloc_ifpages(allocator, len);
   if (block == NULL) {
 #elif _WIN32
   /* NB we can't use _aligned_malloc because we can't get OCaml to
